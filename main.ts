@@ -21,8 +21,10 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     tiles.setTileAt(location, assets.tile`transparency16`)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    game.gameOver(false)
+    info.changeScoreBy(-5)
+    sprites.destroy(ENEMIGO, effects.smiles, 500)
 })
+let ENEMIGO: Sprite = null
 let JUGADOR: Sprite = null
 tiles.setCurrentTilemap(tilemap`nivel1`)
 scene.setBackgroundImage(img`
@@ -169,7 +171,7 @@ scene.cameraFollowSprite(JUGADOR)
 controller.moveSprite(JUGADOR, 100, 0)
 JUGADOR.ay = 800
 tiles.placeOnRandomTile(JUGADOR, assets.tile`myTile`)
-let ENEMIGO = sprites.create(img`
+ENEMIGO = sprites.create(img`
     ........................
     ........................
     ........................
