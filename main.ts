@@ -201,7 +201,12 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    JUGADOR.vy = -300
+    if (JUGADOR.isHittingTile(CollisionDirection.Bottom)) {
+        JUGADOR.setVelocity(0, -300)
+    }
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    controller.moveSprite(JUGADOR, 150, 0)
 })
 info.onCountdownEnd(function () {
     game.gameOver(false)
@@ -217,6 +222,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleRedCrystal, function (sprite, location) {
     game.gameOver(true)
     game.setGameOverEffect(true, effects.confetti)
+})
+controller.B.onEvent(ControllerButtonEvent.Released, function () {
+    controller.moveSprite(JUGADOR, 100, 0)
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
     info.changeScoreBy(10)
