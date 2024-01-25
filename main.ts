@@ -249,7 +249,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `)
-    info.changeScoreBy(-10)
+    info.changeScoreBy(-30)
 })
 let ENEMIGO: Sprite = null
 let JUGADOR: Sprite = null
