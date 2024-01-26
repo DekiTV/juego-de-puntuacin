@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const BLOQUE = SpriteKind.create()
+}
 controller.right.onEvent(ControllerButtonEvent.Released, function () {
     animation.runImageAnimation(
     JUGADOR,
@@ -52,23 +55,23 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     JUGADOR,
     [img`
-        . . . . . . f f f f f f . . . .
-        . . . . f f e e e e f 2 f . . .
-        . . . f f e e e e f 2 2 2 f . .
-        . . . f e e e f f e e e e f . .
-        . . . f f f f e e 2 2 2 2 e f .
-        . . . f e 2 2 2 f f f f e 2 f .
-        . . f f f f f f f e e e f f f .
-        . . f f e 4 4 e b f 4 4 e e f .
-        . . f e e 4 d 4 1 f d d e f . .
-        . . . f e e e 4 d d d d f . . .
-        . . . . f f e e 4 4 4 e f . . .
-        . . . . . 4 d d e 2 2 2 f . . .
-        . . . . . e d d e 2 2 2 f . . .
-        . . . . . f e e f 4 5 5 f . . .
-        . . . . . . f f f f f f . . . .
-        . . . . . . . f f f . . . . . .
-    `,img`
+        . . . . . . f f f f f f . . . . 
+        . . . . f f e e e e f 2 f . . . 
+        . . . f f e e e e f 2 2 2 f . . 
+        . . . f e e e f f e e e e f . . 
+        . . . f f f f e e 2 2 2 2 e f . 
+        . . . f e 2 2 2 f f f f e 2 f . 
+        . . f f f f f f f e e e f f f . 
+        . . f f e 4 4 e b f 4 4 e e f . 
+        . . f e e 4 d 4 1 f d d e f . . 
+        . . . f e e e 4 d d d d f . . . 
+        . . . . f f e e 4 4 4 e f . . . 
+        . . . . . 4 d d e 2 2 2 f . . . 
+        . . . . . e d d e 2 2 2 f . . . 
+        . . . . . f e e f 4 5 5 f . . . 
+        . . . . . . f f f f f f . . . . 
+        . . . . . . . f f f . . . . . . 
+        `,img`
         . . . . . . . . . . . . . . . . 
         . . . . . . f f f f f f . . . . 
         . . . . f f e e e e f 2 f . . . 
@@ -200,6 +203,10 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.builtin.oceanSand4, function (sprite, location) {
+    game.gameOver(true)
+    game.setGameOverMessage(true, "¡ENHORABUENA, HAS GANADO!")
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (JUGADOR.isHittingTile(CollisionDirection.Bottom)) {
         JUGADOR.setVelocity(0, -300)
@@ -211,6 +218,10 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 info.onCountdownEnd(function () {
     game.gameOver(false)
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.swamp.swampTile13, function (sprite, location) {
+    game.gameOver(true)
+    game.setGameOverEffect(true, effects.confetti)
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleBlueCrystal, function (sprite, location) {
     info.changeScoreBy(5)
     tiles.setTileAt(location, assets.tile`transparency16`)
@@ -219,9 +230,33 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
     info.changeScoreBy(1)
     tiles.setTileAt(location, assets.tile`transparency16`)
 })
+info.onLifeZero(function () {
+    game.gameOver(false)
+    game.setGameOverMessage(false, "HAS PERDIDO, INTENTALO DE NUEVO")
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleRedCrystal, function (sprite, location) {
-    game.gameOver(true)
-    game.setGameOverEffect(true, effects.confetti)
+    tiles.setCurrentTilemap(tilemap`nivel2`)
+    tiles.placeOnRandomTile(JUGADOR, assets.tile`myTile`)
+    game.showLongText("¡NIVEL 1 SUPERADO!", DialogLayout.Bottom)
+    ENEMIGO = sprites.create(img`
+        e e e . . . . e e e . . . . 
+        c d d c . . c d d c . . . . 
+        c b d d f f d d b c . . . . 
+        c 3 b d d b d b 3 c . . . . 
+        f b 3 d d d d 3 b f . . . . 
+        e d d d d d d d d e . . . . 
+        e d f d d d d f d e . b f b 
+        f d d f d d f d d f . f d f 
+        f b d d b b d d 2 f . f d f 
+        . f 2 2 2 2 2 2 b b f f d f 
+        . f b d d d d d d b b d b f 
+        . f d d d d d b d d f f f . 
+        . f d f f f d f f d f . . . 
+        . f f . . f f . . f f . . . 
+        `, SpriteKind.Enemy)
+    tiles.placeOnRandomTile(ENEMIGO, assets.tile`myTile0`)
+    ENEMIGO.follow(JUGADOR, 80)
+    info.changeCountdownBy(30)
 })
 controller.B.onEvent(ControllerButtonEvent.Released, function () {
     controller.moveSprite(JUGADOR, 100, 0)
@@ -231,25 +266,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     tiles.setTileAt(location, assets.tile`transparency16`)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    ENEMIGO.setImage(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `)
+    sprites.destroy(ENEMIGO, effects.smiles, 500)
     info.changeScoreBy(-30)
+    info.changeLifeBy(-1)
 })
 let ENEMIGO: Sprite = null
 let JUGADOR: Sprite = null
@@ -427,8 +446,9 @@ ENEMIGO = sprites.create(img`
     ........................
     ........................
     ........................
-`, SpriteKind.Enemy)
+    `, SpriteKind.Enemy)
 tiles.placeOnRandomTile(ENEMIGO, assets.tile`myTile0`)
 ENEMIGO.follow(JUGADOR, 80)
 info.startCountdown(90)
 info.setScore(0)
+info.setLife(2)
