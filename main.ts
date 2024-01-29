@@ -448,7 +448,7 @@ ENEMIGO = sprites.create(img`
     ........................
     `, SpriteKind.Enemy)
 tiles.placeOnRandomTile(ENEMIGO, assets.tile`myTile0`)
-ENEMIGO.follow(JUGADOR, 80)
+ENEMIGO.follow(JUGADOR, 50)
 info.startCountdown(90)
 info.setScore(0)
 info.setLife(2)
