@@ -375,31 +375,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
     info.changeScoreBy(1)
     tiles.setTileAt(location, assets.tile`transparency16`)
 })
-scene.onOverlapTile(SpriteKind.Player, img`
-    . . . . . . . . . . b 5 b . . . 
-    . . . . . . . . . b 5 b . . . . 
-    . . . . . . b b b b b b . . . . 
-    . . . . . b b 5 5 5 5 5 b . . . 
-    . . . . b b 5 d 1 f 5 5 d f . . 
-    . . . . b 5 5 1 f f 5 d 4 c . . 
-    . . . . b 5 5 d f b d d 4 4 . . 
-    . b b b d 5 5 5 5 5 4 4 4 4 4 b 
-    b d d d b b d 5 5 4 4 4 4 4 b . 
-    b b d 5 5 5 b 5 5 5 5 5 5 b . . 
-    c d c 5 5 5 5 d 5 5 5 5 5 5 b . 
-    c b d c d 5 5 b 5 5 5 5 5 5 b . 
-    . c d d c c b d 5 5 5 5 5 d b . 
-    . . c b d d d d d 5 5 5 b b . . 
-    . . . c c c c c c c c b b . . . 
-    . . . . . . . . . . . . . . . . 
-    `, function (sprite, location) {
-    sprites.destroy(ENEMIGO, effects.smiles, 500)
-    info.changeScoreBy(-10)
-    music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
-})
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
     sprites.destroy(FANTASMA, effects.smiles, 500)
-    info.changeScoreBy(-10)
+    info.changeScoreBy(-30)
     info.changeLifeBy(-1)
     music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
 })
@@ -427,8 +405,8 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleRedCrystal, fu
         . f d f f f d f f d f . . . 
         . f f . . f f . . f f . . . 
         `, SpriteKind.Enemy)
-    tiles.placeOnRandomTile(ENEMIGO, assets.tile`myTile0`)
-    ENEMIGO.follow(JUGADOR, 80)
+    tiles.placeOnRandomTile(GATO, assets.tile`myTile0`)
+    GATO.follow(JUGADOR, 80)
     info.changeCountdownBy(30)
 })
 controller.B.onEvent(ControllerButtonEvent.Released, function () {
