@@ -1,5 +1,7 @@
 namespace SpriteKind {
     export const BLOQUE = SpriteKind.create()
+    export const GATO = SpriteKind.create()
+    export const PATO = SpriteKind.create()
 }
 controller.right.onEvent(ControllerButtonEvent.Released, function () {
     animation.runImageAnimation(
@@ -50,6 +52,12 @@ controller.left.onEvent(ControllerButtonEvent.Released, function () {
     100,
     false
     )
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.PATO, function (sprite, otherSprite) {
+    sprites.destroy(PATITO, effects.smiles, 500)
+    info.changeScoreBy(-10)
+    info.changeLifeBy(-1)
+    music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -126,6 +134,12 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     200,
     true
     )
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.GATO, function (sprite, otherSprite) {
+    sprites.destroy(GATO, effects.smiles, 500)
+    info.changeScoreBy(-10)
+    info.changeLifeBy(-1)
+    music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -329,7 +343,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.builtin.oceanSand4, function (spr
         `)
     tiles.placeOnRandomTile(JUGADOR, assets.tile`myTile`)
     game.showLongText("¡NIVEL 2 SUPERADO!", DialogLayout.Bottom)
-    ENEMIGO = sprites.create(img`
+    PATITO = sprites.create(img`
         . . . . . . . . . . b 5 b . . . 
         . . . . . . . . . b 5 b . . . . 
         . . . . . . b b b b b b . . . . 
@@ -346,9 +360,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.builtin.oceanSand4, function (spr
         . . c b d d d d d 5 5 5 b b . . 
         . . . c c c c c c c c b b . . . 
         . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Enemy)
-    tiles.placeOnRandomTile(ENEMIGO, assets.tile`myTile0`)
-    ENEMIGO.follow(JUGADOR, 50)
+        `, SpriteKind.PATO)
+    tiles.placeOnRandomTile(PATITO, assets.tile`myTile0`)
+    PATITO.follow(JUGADOR, 50)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (JUGADOR.isHittingTile(CollisionDirection.Bottom)) {
@@ -404,7 +418,7 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleRedCrystal, fu
         . f d d d d d b d d f f f . 
         . f d f f f d f f d f . . . 
         . f f . . f f . . f f . . . 
-        `, SpriteKind.Enemy)
+        `, SpriteKind.GATO)
     tiles.placeOnRandomTile(GATO, assets.tile`myTile0`)
     GATO.follow(JUGADOR, 80)
     info.changeCountdownBy(30)
@@ -417,14 +431,8 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, func
     info.changeScoreBy(10)
     tiles.setTileAt(location, assets.tile`transparency16`)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    sprites.destroy(GATO, effects.smiles, 500)
-    info.changeScoreBy(-10)
-    info.changeLifeBy(-1)
-    music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
-})
 let GATO: Sprite = null
-let ENEMIGO: Sprite = null
+let PATITO: Sprite = null
 let FANTASMA: Sprite = null
 let JUGADOR: Sprite = null
 tiles.setCurrentTilemap(tilemap`nivel1`)
